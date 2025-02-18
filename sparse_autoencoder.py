@@ -107,8 +107,8 @@ def train_autoencoder(X, autoencoder, epochs, learning_rate, batch_size):
 
 def train_pca(X, n_components):
     pca = PCA(n_components=n_components)
-    X_pca = pca.fit_transform(X)  # Reduce dimensionality
-    X_pca_reconstructed = pca.inverse_transform(X_pca)  # Reconstruct data
+    X_pca = pca.fit_transform(X)  
+    X_pca_reconstructed = pca.inverse_transform(X_pca)
     return X_pca_reconstructed
 
 
@@ -125,7 +125,7 @@ def compute_ssim(X_original, X_reconstructed):
     total_ssim = 0
     
     for i in range(num_images):
-        original_image = X_original[i].reshape(8, 8)  # Reshape to original image size (8x8 for digits)
+        original_image = X_original[i].reshape(8, 8)
         reconstructed_image = X_reconstructed[i].reshape(8, 8)
         ssim_value = ssim(original_image, reconstructed_image, data_range=reconstructed_image.max() - reconstructed_image.min())
         total_ssim += ssim_value
@@ -171,7 +171,7 @@ def visualize_data_quality(autoencoder_features, pca_features, labels):
 def compare_autoencoders(X, autoencoder, epochs, learning_rate, batch_size, n_components, labels):
     autoencoder, losses = train_autoencoder(X, autoencoder, epochs, learning_rate, batch_size)
     reconstructed_autoencoder = autoencoder.reconstruct(X)
-    reconstructed_pca = train_pca(X.T, n_components)  # Use transpose to match dimensions
+    reconstructed_pca = train_pca(X.T, n_components)
     sparse_rmse = rmse_loss(X.T, reconstructed_autoencoder.T)
     pca_rmse = rmse_loss(X.T, reconstructed_pca)
     sparse_accuracy = evaluate_classification_accuracy(X.T, labels, reconstructed_autoencoder.T)
@@ -196,7 +196,7 @@ def compare_autoencoders(X, autoencoder, epochs, learning_rate, batch_size, n_co
 def plot_scatter_from_autoencoder(hidden_activations, labels):
    
     tsne = TSNE(n_components=2)
-    tsne_activations = tsne.fit_transform(hidden_activations.T)  # Transpose to get (num_samples, hidden_size)
+    tsne_activations = tsne.fit_transform(hidden_activations.T)  
 
     
     dataframe = pd.DataFrame(data=tsne_activations, columns=["1st component", "2nd component"])
@@ -211,7 +211,7 @@ def plot_scatter_from_autoencoder(hidden_activations, labels):
 
 def plot_scatter_from_pca(X, labels, n_components=2):
     pca = PCA(n_components=n_components)
-    pca_result = pca.fit_transform(X.T)  # Transpose to get (num_samples, input_size)
+    pca_result = pca.fit_transform(X.T) 
 
     
     dataframe = pd.DataFrame(data=pca_result, columns=["1st component", "2nd component"])
